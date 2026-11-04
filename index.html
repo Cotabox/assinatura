@@ -49,26 +49,190 @@
           <button id="copy-button" class="button button--outline" type="button" onclick="copyToClipboard()">Copiar HTML</button>
           <a id="download-file-button" class="button button--outline" href="#">Baixar HTML</a>
         </div>
-
-        <div id="directions" class="tips">
-          <h2 class="tips__title">Como adicionar a assinatura no Gmail</h2>
-          <p class="tips__text">Use o Gmail no navegador, com a sua conta da Cotabox (Google Workspace).</p>
-          <ol class="tips__steps">
-            <li>Clique em <strong>Copiar assinatura</strong>, logo acima.</li>
-            <li>No Gmail, clique na engrenagem, no canto superior direito, e em <strong>Ver todas as configurações</strong>.</li>
-            <li>Na aba <strong>Geral</strong>, role até <strong>Assinatura</strong> e clique em <strong>Criar nova</strong>. Dê um nome, por exemplo "Cotabox".</li>
-            <li>Clique na caixa de edição e cole com <strong>Ctrl+V</strong> (ou <strong>Cmd+V</strong> no Mac). A assinatura aparece formatada, com a logo.</li>
-            <li>Em <strong>Padrões de assinatura</strong>, escolha essa assinatura em <strong>Para novos e-mails usar</strong> e em <strong>Em respostas/encaminhamentos usar</strong>.</li>
-            <li>Role até o fim da página e clique em <strong>Salvar alterações</strong>.</li>
-          </ol>
-          <p class="tips__note">Não cole o código HTML na caixa do Gmail, porque ele apareceria como texto. Os botões <strong>Copiar HTML</strong> e <strong>Baixar HTML</strong> servem só para quem precisa do código. No app do Gmail para celular a assinatura é configurada à parte e aceita apenas texto simples.</p>
-        </div>
       </section>
     </div>
+
+    <section class="panel help" aria-labelledby="help-title">
+      <p class="panel__eyebrow">Ajuda</p>
+      <h2 id="help-title" class="help__title">Passo a passo e dúvidas comuns</h2>
+      <p class="help__subtitle">Clique em um título para abrir. Se for a primeira vez, comece por "Como adicionar a assinatura no Gmail".</p>
+
+      <div id="help-accordion" class="accordion">
+        <div class="accordion__item is-active">
+          <button type="button" class="accordion__header" id="help-1-header" aria-expanded="true" aria-controls="help-1-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Como adicionar a assinatura no Gmail</span>
+          </button>
+          <div class="accordion__panel" id="help-1-panel" role="region" aria-labelledby="help-1-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <p>Você faz isso uma vez só. Depois, a assinatura aparece sozinha nos seus e-mails novos.</p>
+                <ol>
+                  <li>Preencha seus dados no formulário e clique em <strong>Gerar Assinatura</strong>. Confira a prévia.</li>
+                  <li>Clique em <strong>Copiar assinatura</strong>.</li>
+                  <li>Abra o Gmail no navegador do computador, com a sua conta da Cotabox. Clique na <strong>engrenagem</strong>, no canto superior direito, e depois em <strong>Ver todas as configurações</strong>.</li>
+                  <li>Na aba <strong>Geral</strong>, role a tela até a parte <strong>Assinatura</strong> e clique em <strong>Criar nova</strong>. Escreva um nome, por exemplo "Cotabox", e clique em <strong>Criar</strong>.</li>
+                  <li>Clique dentro da caixa grande de texto e cole com <strong>Ctrl+V</strong> (no Mac, <strong>Cmd+V</strong>). A assinatura deve aparecer formatada, com a logo.</li>
+                  <li>Mais abaixo, em <strong>Padrões de assinatura</strong>, escolha "Cotabox" em <strong>Para novos e-mails usar</strong> e em <strong>Em respostas/encaminhamentos usar</strong>.</li>
+                  <li>Role até o fim da página e clique em <strong>Salvar alterações</strong>.</li>
+                </ol>
+                <div class="accordion__note">
+                  <p>Para conferir, clique em <strong>Escrever</strong> no Gmail. A assinatura deve aparecer no fim da mensagem nova.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header" id="help-2-header" aria-expanded="false" aria-controls="help-2-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>O que faz cada botão?</span>
+          </button>
+          <div class="accordion__panel" id="help-2-panel" role="region" aria-labelledby="help-2-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <ul>
+                  <li><strong>Gerar Assinatura</strong> (depois vira <strong>Atualizar</strong>): monta a assinatura com os dados do formulário e mostra a prévia. Clique de novo sempre que mudar algum dado.</li>
+                  <li><strong>Copiar assinatura</strong>: copia a assinatura pronta, com a formatação e a logo. É o botão que você usa para colar no Gmail.</li>
+                  <li><strong>Copiar HTML</strong>: copia o código da assinatura. Serve só para quem for colocar a assinatura em outro sistema. Não use no Gmail.</li>
+                  <li><strong>Baixar HTML</strong>: salva um arquivo com o código da assinatura no seu computador.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header" id="help-3-header" aria-expanded="false" aria-controls="help-3-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Como preencher cada campo</span>
+          </button>
+          <div class="accordion__panel" id="help-3-panel" role="region" aria-labelledby="help-3-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <ul>
+                  <li><strong>Nome</strong> e <strong>Sobrenome</strong>: são obrigatórios. Escreva como quer que apareça na assinatura.</li>
+                  <li><strong>Cargo</strong>: é opcional. Se ficar em branco, a linha do cargo não aparece.</li>
+                  <li><strong>Telefone</strong>: é opcional. Digite só os números, com o DDD. A página coloca os parênteses e o traço sozinha. Exemplo: 11987654321 vira <strong>(11) 98765-4321</strong>.</li>
+                  <li><strong>E-mail</strong>: é opcional. Digite só a parte antes do @, porque o final <strong>@cotabox.com.br</strong> já vem preenchido. Exemplo: <strong>maria.souza</strong>. Use letras sem acento, números, ponto, hífen ou sublinhado.</li>
+                </ul>
+                <p>Se aparecer uma mensagem em vermelho abaixo de um campo, ela explica o que precisa ser ajustado.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header" id="help-4-header" aria-expanded="false" aria-controls="help-4-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Mudei de cargo ou de telefone. Como atualizo?</span>
+          </button>
+          <div class="accordion__panel" id="help-4-panel" role="region" aria-labelledby="help-4-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <ol>
+                  <li>Preencha o formulário com os dados novos, clique em <strong>Gerar Assinatura</strong> e depois em <strong>Copiar assinatura</strong>.</li>
+                  <li>No Gmail, clique na <strong>engrenagem</strong>, em <strong>Ver todas as configurações</strong>, e na aba <strong>Geral</strong> vá até <strong>Assinatura</strong>.</li>
+                  <li>Clique no nome da assinatura que você já criou, por exemplo "Cotabox".</li>
+                  <li>Clique dentro da caixa de texto, apague tudo (<strong>Ctrl+A</strong> e depois <strong>Delete</strong>) e cole a nova com <strong>Ctrl+V</strong>.</li>
+                  <li>Role até o fim da página e clique em <strong>Salvar alterações</strong>.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header" id="help-5-header" aria-expanded="false" aria-controls="help-5-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>A assinatura apareceu como um monte de código</span>
+          </button>
+          <div class="accordion__panel" id="help-5-panel" role="region" aria-labelledby="help-5-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <p>Isso acontece quando o código foi colado no lugar da assinatura pronta. Para resolver:</p>
+                <ol>
+                  <li>Na caixa de assinatura do Gmail, apague tudo com <strong>Ctrl+A</strong> e depois <strong>Delete</strong>.</li>
+                  <li>Volte para esta página e clique em <strong>Copiar assinatura</strong>. Não use o <strong>Copiar HTML</strong>.</li>
+                  <li>Cole de novo na caixa do Gmail e clique em <strong>Salvar alterações</strong>.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header" id="help-6-header" aria-expanded="false" aria-controls="help-6-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>A logo não aparece</span>
+          </button>
+          <div class="accordion__panel" id="help-6-panel" role="region" aria-labelledby="help-6-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <ul>
+                  <li><strong>Na sua tela:</strong> confira se o computador está conectado à internet, espere alguns segundos, atualize a página do Gmail (tecla <strong>F5</strong>) e abra as configurações de novo.</li>
+                  <li><strong>Se continuar sem logo:</strong> apague a caixa de assinatura, use <strong>Copiar assinatura</strong> e cole de novo.</li>
+                  <li><strong>Para quem recebe:</strong> alguns programas de e-mail, como o Outlook, escondem as imagens até a pessoa clicar para exibir. Nesse caso a logo aparece depois do clique, e isso não é erro da assinatura.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header" id="help-7-header" aria-expanded="false" aria-controls="help-7-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>A assinatura não aparece nas respostas, ou aparece em um lugar estranho</span>
+          </button>
+          <div class="accordion__panel" id="help-7-panel" role="region" aria-labelledby="help-7-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <p>Nas configurações do Gmail, em <strong>Assinatura</strong>, confira estes pontos:</p>
+                <ul>
+                  <li>Em <strong>Padrões de assinatura</strong>, a opção <strong>Em respostas/encaminhamentos usar</strong> precisa estar com a sua assinatura escolhida.</li>
+                  <li>A caixinha <strong>Inserir esta assinatura antes do texto citado em respostas</strong> define o lugar. Marcada, a assinatura fica acima da conversa anterior. Desmarcada, fica no fim de tudo.</li>
+                </ul>
+                <p>Depois de qualquer mudança, role até o fim da página e clique em <strong>Salvar alterações</strong>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header" id="help-8-header" aria-expanded="false" aria-controls="help-8-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Posso usar no celular?</span>
+          </button>
+          <div class="accordion__panel" id="help-8-panel" role="region" aria-labelledby="help-8-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <p>A assinatura deste gerador vale para o Gmail no navegador do computador. No app do Gmail para celular a assinatura é configurada à parte e aceita apenas texto simples, sem logo e sem formatação.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header" id="help-9-header" aria-expanded="false" aria-controls="help-9-panel">
+            <svg class="accordion__icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Posso usar um e-mail que não seja @cotabox.com.br?</span>
+          </button>
+          <div class="accordion__panel" id="help-9-panel" role="region" aria-labelledby="help-9-header">
+            <div class="accordion__content">
+              <div class="accordion__body">
+                <p>Não. Este gerador é só para e-mails <strong>@cotabox.com.br</strong>, por isso o final do e-mail já vem preenchido e você digita apenas o que vem antes do @.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
 
 <script src="assets/js/form-validation.js"></script>
+<script src="assets/js/accordion.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/variables.js"></script>
 

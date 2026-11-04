@@ -25,6 +25,7 @@ function getTeamImages(){
 $(document).ready(function() {
   // update company name
   $('#company-name').text(companyName);
+  CotaboxAccordion.init(document.getElementById('help-accordion'));
 
   // add text fields ***
   // createTextField(label, id, placeholder)

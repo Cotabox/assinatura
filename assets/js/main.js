@@ -1,5 +1,5 @@
 function showControls(flag){
-  $("#directions, #copy-rich-button, #copy-button, #download-file-button").toggleClass("is-hidden", !flag);
+  $("#copy-rich-button, #copy-button, #download-file-button").toggleClass("is-hidden", !flag);
 }
 
 showControls(false);
