@@ -299,6 +299,20 @@ input {
   background: var(--color-primary-deep);
 }
 
+.button--accent {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+}
+
+.button--accent:hover {
+  background: var(--color-primary-dark);
+}
+
+.button--accent:active {
+  background: var(--color-primary-deep);
+}
+
 .button--outline {
   background: var(--surface-card);
   border-color: var(--border-default);
@@ -349,6 +363,25 @@ input {
 
 .tips__text {
   margin: 0 0 var(--space-2);
+  color: var(--color-text-secondary);
+}
+
+.tips__steps {
+  margin: 0 0 var(--space-3);
+  padding-left: 20px;
+}
+
+.tips__steps li {
+  margin-bottom: var(--space-2);
+  color: var(--color-text-primary);
+}
+
+.tips__note {
+  margin: 0;
+  padding: var(--space-3);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
   color: var(--color-text-secondary);
 }
 

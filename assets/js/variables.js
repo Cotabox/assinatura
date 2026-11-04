@@ -9,8 +9,6 @@ var companyInitals = 'Cotabox';
 var www = "";
 if(window.location.href.indexOf("www") > -1){ www = "www."};
 var serverPath = window.location.hostname === "localhost" ? window.location.origin : "https://assinatura.cotabox.com.br";
-// custom video tutorial link
-var tutorialVideoLink = serverPath + "/assets/tutorial/lane-college-signature-tutorial_s.mp4";
 // defaults
 var first, signature;
 
@@ -27,8 +25,6 @@ function getTeamImages(){
 $(document).ready(function() {
   // update company name
   $('#company-name').text(companyName);
-  // update tutorial link
-  $('#tutorialVideo a').attr('href', tutorialVideoLink);
 
   // add text fields ***
   // createTextField(label, id, placeholder)

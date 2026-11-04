@@ -45,18 +45,23 @@
         </div>
 
         <div class="preview__actions">
+          <button id="copy-rich-button" class="button button--accent" type="button" onclick="copySignature()">Copiar assinatura</button>
           <button id="copy-button" class="button button--outline" type="button" onclick="copyToClipboard()">Copiar HTML</button>
           <a id="download-file-button" class="button button--outline" href="#">Baixar HTML</a>
         </div>
 
         <div id="directions" class="tips">
-          <h2 class="tips__title">Desça a tela para copiar o HTML.</h2>
-          <p class="tips__text">Dicas para colocar sua assinatura no Outlook:</p>
-          <ul class="tips__list">
-            <li><a href="./assets/tutorial/edit-signatures-outlook-2016.png" target="_blank">Outlook 2016 screenshot</a></li>
-            <li><a href="./assets/tutorial/add-file-signature-outlook-2016.mp4" target="_blank">Outlook 2016 video</a></li>
-            <li><a href="https://youtu.be/0qvJzNeL0tk?t=12s" target="_blank">Outlook 2010 video</a></li>
-          </ul>
+          <h2 class="tips__title">Como adicionar a assinatura no Gmail</h2>
+          <p class="tips__text">Use o Gmail no navegador, com a sua conta da Cotabox (Google Workspace).</p>
+          <ol class="tips__steps">
+            <li>Clique em <strong>Copiar assinatura</strong>, logo acima.</li>
+            <li>No Gmail, clique na engrenagem, no canto superior direito, e em <strong>Ver todas as configurações</strong>.</li>
+            <li>Na aba <strong>Geral</strong>, role até <strong>Assinatura</strong> e clique em <strong>Criar nova</strong>. Dê um nome, por exemplo "Cotabox".</li>
+            <li>Clique na caixa de edição e cole com <strong>Ctrl+V</strong> (ou <strong>Cmd+V</strong> no Mac). A assinatura aparece formatada, com a logo.</li>
+            <li>Em <strong>Padrões de assinatura</strong>, escolha essa assinatura em <strong>Para novos e-mails usar</strong> e em <strong>Em respostas/encaminhamentos usar</strong>.</li>
+            <li>Role até o fim da página e clique em <strong>Salvar alterações</strong>.</li>
+          </ol>
+          <p class="tips__note">Não cole o código HTML na caixa do Gmail, porque ele apareceria como texto. Os botões <strong>Copiar HTML</strong> e <strong>Baixar HTML</strong> servem só para quem precisa do código. No app do Gmail para celular a assinatura é configurada à parte e aceita apenas texto simples.</p>
         </div>
       </section>
     </div>

@@ -1,5 +1,5 @@
 function showControls(flag){
-  $("#directions, #copy-button, #download-file-button").toggleClass("is-hidden", !flag);
+  $("#directions, #copy-rich-button, #copy-button, #download-file-button").toggleClass("is-hidden", !flag);
 }
 
 showControls(false);
@@ -10,16 +10,18 @@ function presentSignature(fName, signature){
   document.getElementById("demo").innerHTML=signature;
   //suggest to the user to edit or make another
   document.getElementById("build-button").innerHTML = "Atualizar";
+  $("#copy-rich-button").text("Copiar assinatura");
+  $("#copy-button").text("Copiar HTML");
   // add HTML to file link
   var fileName = companyInitals + '_' + fName + '.html';
   addSignatureToFile(fileName, signature);
 }
 
-function showCopyFeedback() {
-  $("#copy-button").text("HTML copiado! Copiar novamente?");
+function showCopyFeedback(buttonId, message) {
+  $("#" + buttonId).text(message);
 }
 
-function copyWithSelection(text) {
+function copyWithSelection(text, onCopied) {
   var field = document.createElement("textarea");
   field.value = text;
   field.setAttribute("readonly", "");
@@ -29,13 +31,42 @@ function copyWithSelection(text) {
   var copied = document.execCommand("copy");
   document.body.removeChild(field);
   if (!copied) return;
-  showCopyFeedback();
+  onCopied();
 }
 
 function copyToClipboard() {
-  if (!navigator.clipboard) return copyWithSelection(signature);
-  navigator.clipboard.writeText(signature).then(showCopyFeedback, function() {
-    copyWithSelection(signature);
+  var onCopied = function() {
+    showCopyFeedback("copy-button", "HTML copiado! Copiar novamente?");
+  };
+  if (!navigator.clipboard) return copyWithSelection(signature, onCopied);
+  navigator.clipboard.writeText(signature).then(onCopied, function() {
+    copyWithSelection(signature, onCopied);
+  });
+}
+
+function copyRenderedSignature(onCopied) {
+  var range = document.createRange();
+  range.selectNodeContents(document.getElementById("demo"));
+  var selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  var copied = document.execCommand("copy");
+  selection.removeAllRanges();
+  if (!copied) return;
+  onCopied();
+}
+
+function copySignature() {
+  var onCopied = function() {
+    showCopyFeedback("copy-rich-button", "Assinatura copiada! Copiar novamente?");
+  };
+  if (!window.ClipboardItem || !navigator.clipboard || !navigator.clipboard.write) return copyRenderedSignature(onCopied);
+  var item = new ClipboardItem({
+    "text/html": new Blob([signature], { type: "text/html" }),
+    "text/plain": new Blob([document.getElementById("demo").innerText], { type: "text/plain" })
+  });
+  navigator.clipboard.write([item]).then(onCopied, function() {
+    copyRenderedSignature(onCopied);
   });
 }
 
