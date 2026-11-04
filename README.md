@@ -8,6 +8,7 @@
 - [Imagens da assinatura](#Imagens-da-assinatura)
 - [Executando localmente](#Executando-localmente)
 - [Adicionando a assinatura no Gmail](#Adicionando-a-assinatura-no-Gmail)
+- [Ajuda dentro da página](#Ajuda-dentro-da-página)
 - [Publicação](#Publicação)
 
 <br/>
@@ -144,6 +145,22 @@ Os clientes de e-mail só carregam imagens por uma URL pública em HTTPS, por is
 6. Role até o fim da página e clique em **Salvar alterações**.
 
 **Observação:** no app do Gmail para celular a assinatura é configurada à parte e aceita apenas texto simples.
+
+<br/>
+
+---
+
+<br/>
+
+## Ajuda dentro da página
+
+A página tem uma seção **Ajuda** com acordeões, pensada para quem não é da área técnica. Ela traz o passo a passo do Gmail, o que faz cada botão, como preencher os campos, como atualizar a assinatura e as respostas para as dúvidas mais comuns.
+
+O comportamento segue o `CbCollapse` (modo `accordion`, com um item aberto por vez) do Cotabox UI Next. O script está em `assets/js/accordion.js` e os textos ficam no `index.html`.
+
+Para incluir uma pergunta nova, copie um bloco `accordion__item` do `index.html` e troque os ids `help-N-header` e `help-N-panel`.
+
+**Atenção:** se o nome de um botão da página mudar, atualize também os textos da ajuda que o citam.
 
 <br/>
 
