@@ -7,6 +7,7 @@
 - [Formulário: máscaras e validações](#Formulário-máscaras-e-validações)
 - [Imagens da assinatura](#Imagens-da-assinatura)
 - [Executando localmente](#Executando-localmente)
+- [Adicionando a assinatura no Gmail](#Adicionando-a-assinatura-no-Gmail)
 - [Publicação](#Publicação)
 
 <br/>
@@ -19,7 +20,7 @@
 
 **Atenção:** o projeto é estático (HTML, CSS e JavaScript). Não precisa de build nem de Node para rodar.
 
-Este projeto gera a **assinatura de e-mail padrão da Cotabox**. A pessoa preenche nome, sobrenome, cargo, telefone e e-mail, confere a prévia e copia ou baixa o HTML para colocar no cliente de e-mail (Outlook, Gmail, etc.).
+Este projeto gera a **assinatura de e-mail padrão da Cotabox**. A pessoa preenche nome, sobrenome, cargo, telefone e e-mail, confere a prévia e copia a assinatura formatada para colar no Gmail (Google Workspace), que é o e-mail usado na Cotabox. O HTML também pode ser copiado como código ou baixado.
 
 O funcionamento baseia-se em dois pilares principais:
 
@@ -117,7 +118,32 @@ Os clientes de e-mail só carregam imagens por uma URL pública em HTTPS, por is
 
 4. Preencha o formulário e clique em **Gerar Assinatura**.
 
-5. Use **Copiar HTML** ou **Baixar HTML**. O botão de copiar usa a área de transferência do navegador, com um método alternativo quando ela não está disponível.
+5. Use **Copiar assinatura** para colar a assinatura formatada no Gmail, conforme [Adicionando a assinatura no Gmail](#Adicionando-a-assinatura-no-Gmail). Os botões **Copiar HTML** e **Baixar HTML** entregam o código.
+   - **Nota:** os botões de copiar usam a área de transferência do navegador, com um método alternativo quando ela não está disponível.
+
+<br/>
+
+---
+
+<br/>
+
+## Adicionando a assinatura no Gmail
+
+**Atenção:** a caixa de assinatura do Gmail aceita conteúdo formatado, não código. Por isso use **Copiar assinatura**. Colar o código HTML faria a assinatura aparecer como texto.
+
+1. Gere a assinatura na página e clique em **Copiar assinatura**.
+
+2. No Gmail, no navegador e com a conta da Cotabox, clique na engrenagem, no canto superior direito, e em **Ver todas as configurações**.
+
+3. Na aba **Geral**, role até **Assinatura** e clique em **Criar nova**. Dê um nome, por exemplo "Cotabox".
+
+4. Clique na caixa de edição e cole com `Ctrl+V` (`Cmd+V` no Mac). A assinatura deve aparecer formatada, com a logo.
+
+5. Em **Padrões de assinatura**, escolha essa assinatura em **Para novos e-mails usar** e em **Em respostas/encaminhamentos usar**.
+
+6. Role até o fim da página e clique em **Salvar alterações**.
+
+**Observação:** no app do Gmail para celular a assinatura é configurada à parte e aceita apenas texto simples.
 
 <br/>
 
