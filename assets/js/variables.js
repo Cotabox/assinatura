@@ -8,7 +8,7 @@ var companyInitals = 'Cotabox';
 // this may change based on your local or live server set
 var www = "";
 if(window.location.href.indexOf("www") > -1){ www = "www."};
-var serverPath = "https://assinatura.cotabox.com.br";
+var serverPath = window.location.hostname === "localhost" ? window.location.origin : "https://assinatura.cotabox.com.br";
 // custom video tutorial link
 var tutorialVideoLink = serverPath + "/assets/tutorial/lane-college-signature-tutorial_s.mp4";
 // defaults
@@ -30,11 +30,6 @@ $(document).ready(function() {
   // update tutorial link
   $('#tutorialVideo a').attr('href', tutorialVideoLink);
 
-  // setup ZeroClipboard
-  var client = new ZeroClipboard($('#copy-button'), {
-      moviePath : 'util/assets/js/vendor/ZeroClipboard.swf'
-  });
-
   // add text fields ***
   // createTextField(label, id, placeholder)
   $.when(getTeamImages()).done(function(results){
@@ -42,28 +37,29 @@ $(document).ready(function() {
       teamImgs.push($(this).text().trim());
     });
     // createDataSelectBox("Add your headshot", "headshot", teamImgs);
-    $(".chosen-select").chosen({width: "100%"});
-    createTextField("Nome*", "first", "João");
-    createTextField("Sobrenome*", "last", "Cavalcante");
-    createTextField("Cargo", "title", "Director of Awesomeness");
-    createTextField("Telefone", "phone", "(11) 1234-5678");
-    createTextField("E-mail", "email", "kavalcante@cotabox.com.br");
+    createTextField("Nome*", "first", "Maria", { autocomplete: "given-name" });
+    createTextField("Sobrenome*", "last", "Souza", { autocomplete: "family-name" });
+    createTextField("Cargo", "title", "Analista de Compras", { autocomplete: "organization-title" });
+    createTextField("Telefone", "phone", "(11) 91234-5678", { inputmode: "tel", autocomplete: "tel-national", maxlength: "15" });
+    createTextField("E-mail", "email", "nome.sobrenome@cotabox.com.br", { inputmode: "email", autocomplete: "email" });
+    CotaboxForm.init();
   });
 });
 
 // on submit button click
 function buidSignature() {
+  if (!CotaboxForm.validateAll()) return;
   showControls(true);
 
   //Get the value of input fields with id="INPUT-FIELD-ID" ***
-  first = document.getElementById("first").value;
-  last = document.getElementById("last").value;
+  first = document.getElementById("first").value.trim();
+  last = document.getElementById("last").value.trim();
   creds = '';
   if(creds !== '') creds = ', ' + creds;
-  title = document.getElementById("title").value;
+  title = document.getElementById("title").value.trim();
   division = '';
-  phone = formatPhoneNumber( document.getElementById("phone").value );
-  email = document.getElementById("email").value;
+  phone = CotaboxForm.formatPhone( document.getElementById("phone").value );
+  email = CotaboxForm.normalizeEmail( document.getElementById("email").value );
 
   $.ajax({
     url:"./dist/code.html",  
@@ -82,11 +78,6 @@ function buidSignature() {
         email, 
         serverPath
       );
-      console.log(headshot);
-
-      // if headshot is empty or null ...whatever
-      if(headshot=='' || headshot=="No Photo")
-        signature = moveCompanyLogo(signature, "#top-logo", "#bottom-logo");
 
       // optional fields ***
       if(creds===''){signature = removeElementFromTemplate('creds', signature);}

@@ -1,16 +1,5 @@
 function showControls(flag){
-  if(flag){
-    $( ".copy-me" ).show();
-    $( "#directions" ).show();
-    $( "#copy-button" ).show();
-    $( "#download-file-button" ).show();
-  }
-  else {
-    $( ".copy-me" ).hide();
-    $( "#directions" ).hide();
-    $( "#copy-button" ).hide();
-    $( "#download-file-button" ).hide();
-  }
+  $("#directions, #copy-button, #download-file-button").toggleClass("is-hidden", !flag);
 }
 
 showControls(false);
@@ -21,23 +10,33 @@ function presentSignature(fName, signature){
   document.getElementById("demo").innerHTML=signature;
   //suggest to the user to edit or make another
   document.getElementById("build-button").innerHTML = "Atualizar";
-  // add signature to hidden input field
-  $('#zc-input').val(signature);
   // add HTML to file link
   var fileName = companyInitals + '_' + fName + '.html';
   addSignatureToFile(fileName, signature);
 }
 
+function showCopyFeedback() {
+  $("#copy-button").text("HTML copiado! Copiar novamente?");
+}
+
+function copyWithSelection(text) {
+  var field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  field.className = "copy-fallback";
+  document.body.appendChild(field);
+  field.select();
+  var copied = document.execCommand("copy");
+  document.body.removeChild(field);
+  if (!copied) return;
+  showCopyFeedback();
+}
+
 function copyToClipboard() {
-  // adds HTML to user's clipboard
-  var client = new ZeroClipboard($('#copy-button'), {
-      moviePath : 'util/ZeroClipboard.swf'
+  if (!navigator.clipboard) return copyWithSelection(signature);
+  navigator.clipboard.writeText(signature).then(showCopyFeedback, function() {
+    copyWithSelection(signature);
   });
-  client.on('dataRequested', function(client, args){
-       client.setText(signature);
-       document.getElementById("copy-button").innerHTML = "HTML copiado! Copiar novamente?";
-  });
-  document.getElementById("copy-button").innerHTML = "HTML copiado! Copiar novamente?";
 }
 
 function addSignatureToFile(filename, emailSig) {
@@ -45,16 +44,6 @@ function addSignatureToFile(filename, emailSig) {
   var $element = $('a#download-file-button');
   $element.attr('href','data:text/html; charset=utf-8,' + encodeURIComponent(emailSig));
   $element.attr('download', filename);
-}
-
-function formatPhoneNumber(number){
-  var numberStripped = number.replace(/[^a-zA-Z0-9]/g, '');
-  if (numberStripped.length === 10) {
-    var numberTailored = numberStripped.replace(/(\d\d)(\d\d\d\d)(\d\d\d\d)/, "($1) $2-$3");
-  } else {
-    var numberTailored = numberStripped.replace(/(\d\d)(\d)(\d\d\d\d)(\d\d\d\d)/, "($1) $2 $3-$4");    
-  }
-  return numberTailored;
 }
 
 function getQueryVariable(variable){
@@ -84,13 +73,16 @@ function loadTemplate(...rest) {
   });
 }
 
-function createTextField(label, id, placeholder){
+function createTextField(label, id, placeholder, attributes){
   // Create new input field
   var newInput = document.createElement("INPUT");
   newInput.id = id;
   newInput.name = id;
   newInput.type = "text";
   newInput.placeholder = placeholder;
+  Object.keys(attributes || {}).forEach(function(name){
+    newInput.setAttribute(name, attributes[name]);
+  });
 
   var newlabel = document.createElement("Label");
   newlabel.setAttribute("for",id);
@@ -104,7 +96,7 @@ function createTextField(label, id, placeholder){
 
   // add to #form
   document.getElementById("form").appendChild(newDiv);
-  $('#form div').last().addClass('field');
+  $('#form div').last().addClass('form__field');
 }
 
 function getFiles(dir){
@@ -179,27 +171,6 @@ function removeElementFromTemplate(id, sig){
   return sig;
 }
 
-function moveCompanyLogo(sig, topSec, bottomSec){
-  var $el =  $(sig);
-  // if no headshot image do this...
-  $($el).find(topSec)
-    .attr('src',serverPath + '/assets/images/logo-cotabox.png')
-    .removeAttr('height','100%')
-    .css('border-radius','0');
-  $($el).find(".company-span")
-    .css('display', 'block')
-    .css('margin-top', '0.5em');
-  $($el).find(bottomSec).remove();
-  // next: move address up to top table
-  // move sig3 below sig2
-  var $toMove = $($el).find("#sig3");
-  $($el).find("#sig2").append($toMove);
-
-  // turn html back to string
-  sig = $el.prop('outerHTML');
-  return sig;
-}
-
 //////
 // if testing variable exists
 //////
@@ -208,15 +179,11 @@ if (urlvar) {
   console.log('yup, test is ready');
   showControls(true);
 
-  headshot = "bill-doe.jpg";
-  first = "John";
-  last = "Smith";
-  creds = "Ph.D";
-  if(creds !== '') creds = ', ' + creds;
-  title = "Director of Awesomeness";
-  division = "Sales";
-  phone = "901-555-7777";
-  cellphone = "731-555-7575";
+  first = "João";
+  last = "Cavalcante";
+  title = "Diretor de Tecnologia";
+  phone = "(11) 91234-5678";
+  email = "joao.cavalcante@cotabox.com.br";
 
   var tempfile = "./dist/code.html";
 
@@ -224,7 +191,7 @@ if (urlvar) {
     url:tempfile,  
     success:function(data) {
 
-      signature = convertStringToTemplate(data, first, last, creds, title, phone);
+      signature = convertStringToTemplate(data, first, last, title, phone, email, serverPath);
       // if(creds==''){signature = removeElementFromTemplate('creds', signature);}
       // if(title==''){signature = removeElementFromTemplate('title', signature);}
       if(phone==''){signature = removeElementFromTemplate('phone', signature);}
