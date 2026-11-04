@@ -1,96 +1,45 @@
-<head>
-	<style>
-		body {font-size: 12px; line-height: 12px;}
-		table {margin:0;padding:0;}
-		tr {margin:0;padding:0;}
-		.headshot {border-radius: 100%; max-width:100%; max-height: 100%;}
-		.font {font-family:helvetica,arial,sans-serif;}
-		.inner-td{margin:0;padding:0;white-space:nowrap; margin-bottom: 3px; display: block}
-		.color-tr{color:#b0a49b;}
-		.logo-td1 {width:86px;margin:0;padding-right:9px;}
-		.logo-td2{width:5px;}
-		.right-top-td{margin:0;padding:0;}
-		.right-table{border:none;text-decoration:none;font-family:helvetica,arial,sans-serif;font-size:12px;color:#b0b0b0;border-collapse:collapse;-webkit-text-size-adjust:none;}
-		.name-span{font-size:1.25em;color:#3864FA;}
-		.cred-span{font-size:1.25em;color:#919191;}
-		.position-span{color:#919191;}
-		.company-span{color:#919191; font-weight: 600;}
-		.phone-letter{color:#121D66;}
-		.no-dec{border:none;text-decoration:none;}
-		.phone-number{border:none;color:#919191;text-decoration:none;}
-		.web-link{color:#919191;text-decoration:none;}
-	</style>
-</head>
-<body>
-	<div>
-		<table width="320" id="sig" cellspacing="0" cellpadding="0" border-spacing="0">
-			<tr>
-				<td class="top-td" style="vertical-align: top;">
-					<!-- Headshot -->
-					<img id="top-logo" class="headshot" border="0" width="150" src="${serverPath}/assets/images/staff/${headshot}">
-				</td>
-			</tr>
-			<tr>
-				<!-- Right Side Info -->
-				<td valign="top" class="right-top-td">
-					<table id="sig2" cellspacing="0" cellpadding="0" border-spacing="0" class="right-table">
-						<!-- Name and Credetials -->
-						<tr>
-							<td class="inner-td font" style="display: block">
-								<b><span class="name-span">${first} ${last}</span></b>
-							</td>
-						</tr>
-						<!-- Title/Position -->
-						<tr id="title">
-							<td class="inner-td font">
-								<span class="position-span">${title}</span>
-							</td>
-						</tr>
-						<!-- Phone Number -->
-						<tr class="color-tr" id="phone">
-							<td class="inner-td">
-								<span class="phone-letter">Telefone:&nbsp;</span><a href="tel:${phone}" target="_blank" class="no-dec"><span class="phone-number">${phone}</span></a>
-							</td>
-						</tr>
-						<!-- Cell Phone -->
-						<tr class="color-tr" id="email">
-							<td class="inner-td">
-								<span class="phone-letter">E-mail:&nbsp;</span><a href="mailto:${email}" target="_blank" class="no-dec"><span class="phone-number">${email}</span></a>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-		<table width="320" id="sig" cellspacing="0" cellpadding="0" border-spacing="0" style="margin-top: 20px;">
-			<tr>
-				<td width="80" class="top-td">
-					<!-- Logo -->
-					<a href="https://cotabox.com.br/"><img id="bottom-logo" border="0" width="70" src="${serverPath}/assets/images/logo-cotabox.png"></a>
-				</td>
-				<!-- Right Side Info -->
-				<td valign="top" class="right-top-td" id="address-content">
-				</td>
-			<tr style="margin-top: 20px !important">
-				<td width="100%">
-					<table cellspacing="0" cellpadding="0" border-spacing="0" class="right-table">
-						<!-- Company Name -->
-						<!-- Website -->
-						<tr class="color-tr">
-							<td class="inner-td">
-								<a href="https://cotabox.com.br/" target="_blank" class="no-dec"><span class="web-link">www.cotabox.com.br</span></a></span>
-							</td>
-						</tr>
-						<!-- Address -->
-						<tr>
-							<td class="inner-td">
-								<br>
-								<span class="position-span">Al. Vicente Pinzon, 54<br>5º Andar<br> Vila Olímpia, São Paulo - SP<br>CEP: 04547-130</span>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</div>
-</body>
+<div>
+	<table id="sig" role="presentation" width="440" cellspacing="0" cellpadding="0" border="0" style="width:440px;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;">
+		<tr>
+			<td style="padding:0 0 14px 0;">
+				<a href="https://cotabox.com.br/" target="_blank" style="text-decoration:none;border:0;"><img id="logo" src="https://storage.googleapis.com/bkt-sandbox-email-assets/assinatura-logo-cotabox.png" width="120" height="23" alt="Cotabox" border="0" style="display:block;border:0;width:120px;height:23px;"></a>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding:2px 0 2px 14px;border-left:3px solid #2f5cff;">
+				<table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;">
+					<tr>
+						<td style="padding:0 0 2px 0;font-size:18px;line-height:22px;font-weight:bold;color:#141824;">${first} ${last}</td>
+					</tr>
+					<tr id="title">
+						<td style="padding:0 0 10px 0;font-size:13px;line-height:18px;color:#5c6172;">${title}</td>
+					</tr>
+					<tr id="phone">
+						<td style="padding:0 0 4px 0;font-size:12px;line-height:18px;color:#141824;">
+							<span style="font-size:10px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#2f5cff;">Telefone&nbsp;&nbsp;</span><a href="tel:${phone}" target="_blank" style="color:#141824;text-decoration:none;">${phone}</a>
+						</td>
+					</tr>
+					<tr id="email">
+						<td style="padding:0;font-size:12px;line-height:18px;color:#141824;">
+							<span style="font-size:10px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#2f5cff;">E-mail&nbsp;&nbsp;</span><a href="mailto:${email}" target="_blank" style="color:#141824;text-decoration:none;">${email}</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding:16px 0 0 0;">
+				<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;">
+					<tr>
+						<td style="padding:12px 0 0 0;border-top:1px solid #e5e7eb;font-size:12px;line-height:18px;">
+							<a href="https://cotabox.com.br/" target="_blank" style="font-weight:bold;color:#2f5cff;text-decoration:none;">www.cotabox.com.br</a>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding:4px 0 0 0;font-size:11px;line-height:16px;color:#7c828f;">Al. Vicente Pinzon, 54 · 5º Andar<br>Vila Olímpia, São Paulo - SP · CEP 04547-130</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
