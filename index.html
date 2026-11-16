@@ -126,7 +126,8 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
   var ADDR2='Vila Cordeiro, São Paulo – SP · 04583-110';
   var MAPS='https://www.google.com/maps/search/?api=1&query=Av.%20Dr.%20Chucri%20Zaidan%2C%20902%20-%20Vila%20Cordeiro%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004583-110';
   var PRESETS={ giuseppe:{nome:'Giuseppe Casarin',cargo:'CEO & Founder',tel:'(11) 9 3619-7090',email:'giuseppe@cotabox.com.br'} };
-  var ids=['nome','cargo','tel','email','li','img'];
+  var IMG_BASE='https://assinatura.cotabox.com.br/assets/images/';
+  var ids=['nome','cargo','tel','email','li'];
   var el={}; ids.concat(['wa','end','anim','sig','status','manual','offscreen']).forEach(function(k){ el[k]=document.getElementById(k); });
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -165,7 +166,7 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
   }
 
   function fmt(){ var r=document.querySelector('input[name=fmt]:checked'); return r?r.value:'logo'; }
-  function imgUrl(){ var b=el.img.value.trim(); if(b && !/\/$/.test(b)) b+='/'; return b+'cotabox-assinatura-'+fmt()+'.'+(el.anim.checked?'gif':'png'); }
+  function imgUrl(){ return IMG_BASE+'cotabox-assinatura-'+fmt()+'.'+(el.anim.checked?'gif':'png'); }
   function fallback(){ return fmt()==='logo' ? (el.anim.checked?LOGO_GIF_FALLBACK:LOGO_PNG_FALLBACK) : (el.anim.checked?GIF_FALLBACK:ICON_FALLBACK); }
   var imgOk=null;
   function render(){
@@ -184,7 +185,7 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
   }
   function say(kind,msg){ el.status.className='status '+kind; el.status.textContent=msg; }
   function missing(){ return ['nome','cargo','tel','email'].filter(function(k){ return !el[k].value.trim(); }); }
-  function imgNote(){ return imgOk===false ? ' Atenção: o ícone ainda não está publicado em assinatura.cotabox.com.br, então não vai aparecer para quem recebe até alguém subir os arquivos (veja “Para quem cuida do site”).' : ''; }
+  function imgNote(){ return imgOk===false ? ' Atenção: não foi possível carregar a imagem da assinatura agora, então ela pode não aparecer para quem recebe. Tente de novo em alguns instantes.' : ''; }
 
   function copyRich(){
     var m=missing(); if(m.length){ say('warn','Preencha nome, cargo, telefone e e-mail antes de copiar.'); return; }
@@ -216,7 +217,7 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
   }
 
   load(); render();
-  ['nome','cargo','tel','email','li','img'].forEach(function(k){ el[k].addEventListener('input',render); });
+  ['nome','cargo','tel','email','li'].forEach(function(k){ el[k].addEventListener('input',render); });
   ['wa','end','anim'].forEach(function(k){ el[k].addEventListener('change',function(){ imgOk=null; render(); }); });
   document.querySelectorAll('input[name=fmt]').forEach(function(r){ r.addEventListener('change',function(){ imgOk=null; render(); }); });
   document.getElementById('copy').addEventListener('click',copyRich);
