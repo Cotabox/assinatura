@@ -30,6 +30,8 @@ input:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px so
 .check{ flex-direction:row; align-items:center; gap:10px; color:var(--ink); font-weight:400; font-size:14px; }
 .check input{ width:18px; height:18px; accent-color:var(--blue); }
 .hint{ font-size:12px; color:var(--muted); font-weight:400; }
+.err{ font-size:12px; line-height:1.4; color:#991B1B; font-weight:400; margin:4px 0 0; }
+input.invalid{ border-color:#DC2626 !important; }
 .preview{ display:flex; flex-direction:column; gap:14px; }
 .mail{ background:#FFFFFF; color:#202124; border:1px solid var(--line); border-radius:20px; overflow:hidden; }
 .mail-top{ padding:14px 22px; border-bottom:1px solid #ECEEF3; font-size:13px; color:#5F6368; font-family:Arial,sans-serif; }
@@ -63,9 +65,9 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
     <form id="f" autocomplete="on" onsubmit="return false">
       <label>Nome<input type="text" id="nome" placeholder="Ana Souza" autocomplete="name"></label>
       <label>Cargo<input type="text" id="cargo" placeholder="Analista de Implantação" autocomplete="organization-title"></label>
-      <label>Telefone<input type="tel" id="tel" placeholder="(11) 9 0000-0000" autocomplete="tel"></label>
+      <label>Telefone <span class="hint">opcional · deixe em branco para não mostrar telefone</span><input type="tel" id="tel" placeholder="(11) 9 0000-0000" autocomplete="tel" inputmode="tel" maxlength="16"></label>
       <label class="check"><input type="checkbox" id="wa"> Esse número atende no WhatsApp</label>
-      <label>E-mail<input type="email" id="email" placeholder="ana@cotabox.com.br" autocomplete="email"></label>
+      <label>E-mail<input type="text" id="email" placeholder="ana@cotabox.com.br" autocomplete="email" inputmode="email" spellcheck="false"></label>
       <label>LinkedIn <span class="hint">opcional · cole o link do seu perfil</span><input type="url" id="li" placeholder="https://www.linkedin.com/in/…"></label>
       <label class="check"><input type="checkbox" id="end" checked> Mostrar o endereço do escritório</label>
       <div><div class="hint" style="margin-bottom:6px">Formato</div><label class="check"><input type="radio" name="fmt" value="logo" checked> Logo completo (símbolo + cotabox)</label><label class="check"><input type="radio" name="fmt" value="icone"> Só o símbolo, num bloco azul</label></div>
@@ -132,24 +134,160 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function digits(s){ return String(s).replace(/\D/g,''); }
-  function val(k){ var v=el[k].value.trim(); return v || el[k].placeholder || ''; }
+  function val(k){ var v=k==='email' ? normalizeEmail(el.email.value) : el[k].value.trim(); return v || el[k].placeholder || ''; }
+  var EMAIL_DOMAIN='@cotabox.com.br';
+  var EMAIL_LOCAL_RE=/^[a-z0-9]+([._-][a-z0-9]+)*$/;
+  var MSG={
+    nome:'Informe o nome.',
+    cargo:'Informe o cargo.',
+    emailRequired:'Informe o seu e-mail.',
+    email:'Use só letras, números, ponto, hífen ou sublinhado antes do @. Exemplo: ana.souza',
+    telIncomplete:'Informe o telefone completo, com DDD. Exemplo: (11) 9 1234-5678. Se não quiser mostrar telefone, deixe em branco.',
+    telArea:'DDD inválido. Use um DDD entre 11 e 99.'
+  };
+
+  function phoneDigits(s){ return digits(s).slice(0,11); }
+  function formatPhone(s){
+    var d=phoneDigits(s);
+    if(d.length<=2) return d.length ? '('+d : '';
+    var area=d.slice(0,2), rest=d.slice(2);
+    if(rest.charAt(0)==='9'){
+      var out='('+area+') 9';
+      if(rest.length>1) out+=' '+rest.slice(1,5);
+      if(rest.length>5) out+='-'+rest.slice(5,9);
+      return out;
+    }
+    rest=rest.slice(0,8);
+    var fixo='('+area+') '+rest.slice(0,4);
+    if(rest.length>4) fixo+='-'+rest.slice(4,8);
+    return fixo;
+  }
+  function phoneError(s){
+    var d=phoneDigits(s);
+    if(!d) return '';
+    var mobile=d.charAt(2)==='9';
+    if(d.length<(mobile?11:10)) return MSG.telIncomplete;
+    if(!/^[1-9][1-9]/.test(d)) return MSG.telArea;
+    return '';
+  }
+  function emailLocal(s){ return String(s||'').split('@')[0].toLowerCase().replace(/[^a-z0-9._-]/g,''); }
+  function normalizeEmail(s){ var l=emailLocal(s); return l ? l+EMAIL_DOMAIN : ''; }
+  function emailError(s){
+    var l=emailLocal(s);
+    if(!l) return MSG.emailRequired;
+    return EMAIL_LOCAL_RE.test(l) ? '' : MSG.email;
+  }
+  function typed(k){ return k==='email' ? !!emailLocal(el.email.value) : !!el[k].value.trim(); }
+  function phoneShown(){
+    if(typed('tel')) return el.tel.value.trim();
+    var pristine=!['nome','cargo','tel','email'].some(typed);
+    return pristine ? el.tel.placeholder : '';
+  }
+  function syncWhatsapp(){
+    var has=!!phoneDigits(el.tel.value);
+    el.wa.disabled=!has;
+    if(!has) el.wa.checked=false;
+  }
+
+  function caretAfterDigits(text,count){
+    if(!count) return 0;
+    var seen=0;
+    for(var i=0;i<text.length;i++){
+      if(/\d/.test(text.charAt(i))) seen++;
+      if(seen===count) return i+1;
+    }
+    return text.length;
+  }
+  function bindPhoneMask(input){
+    input.addEventListener('input',function(){
+      var before=digits(input.value.slice(0,input.selectionStart)).length;
+      input.value=formatPhone(input.value);
+      var pos=caretAfterDigits(input.value,before);
+      input.setSelectionRange(pos,pos);
+    });
+  }
+  function keepCaretBeforeDomain(input){
+    if(input.selectionStart!==input.selectionEnd) return;
+    var limit=emailLocal(input.value).length;
+    if(input.selectionStart>limit) input.setSelectionRange(limit,limit);
+  }
+  function bindEmailMask(input){
+    var ignoring=false;
+    input.addEventListener('beforeinput',function(e){
+      if(e.inputType && e.inputType.indexOf('delete')===0){ ignoring=false; return; }
+      if(e.inputType!=='insertText') return;
+      if(e.data==='@') ignoring=true;
+      if(ignoring) e.preventDefault();
+    });
+    input.addEventListener('focus',function(){
+      ignoring=false;
+      if(!input.value) input.value=EMAIL_DOMAIN;
+      keepCaretBeforeDomain(input);
+    });
+    ['click','keyup'].forEach(function(ev){ input.addEventListener(ev,function(){ keepCaretBeforeDomain(input); }); });
+    input.addEventListener('input',function(){
+      var caret=emailLocal(input.value.slice(0,input.selectionStart)).length;
+      input.value=emailLocal(input.value)+EMAIL_DOMAIN;
+      var pos=Math.min(caret,emailLocal(input.value).length);
+      input.setSelectionRange(pos,pos);
+    });
+    input.addEventListener('blur',function(){ ignoring=false; input.value=normalizeEmail(input.value); });
+  }
+
+  var VALIDATORS={
+    nome:function(v){ return v.trim() ? '' : MSG.nome; },
+    cargo:function(v){ return v.trim() ? '' : MSG.cargo; },
+    tel:phoneError,
+    email:emailError
+  };
+  function showError(k,message){
+    var input=el[k], field=input.parentNode, id=k+'-erro', box=document.getElementById(id);
+    input.classList.toggle('invalid',!!message);
+    input.setAttribute('aria-invalid',message?'true':'false');
+    if(!message){ if(box) box.remove(); input.removeAttribute('aria-describedby'); return; }
+    if(!box){ box=document.createElement('p'); box.id=id; box.className='err'; box.setAttribute('role','alert'); field.appendChild(box); }
+    box.textContent=message;
+    input.setAttribute('aria-describedby',id);
+  }
+  var touched={};
+  function validateField(k){
+    touched[k]=true;
+    var message=VALIDATORS[k](el[k].value);
+    showError(k,message);
+    return message;
+  }
+  function validateForm(){
+    var firstInvalid='';
+    Object.keys(VALIDATORS).forEach(function(k){ if(validateField(k) && !firstInvalid) firstInvalid=k; });
+    if(!firstInvalid) return true;
+    say('warn','Confira os campos destacados antes de copiar.');
+    el[firstInvalid].focus();
+    return false;
+  }
+  function bindValidation(){
+    Object.keys(VALIDATORS).forEach(function(k){
+      el[k].addEventListener('blur',function(){ validateField(k); });
+      el[k].addEventListener('input',function(){ if(touched[k]) validateField(k); });
+    });
+  }
 
   function build(imgSrc){
-    var nome=esc(val('nome')), cargo=esc(val('cargo')), tel=esc(val('tel')), email=esc(val('email'));
-    var d=digits(val('tel')); if(d && d.indexOf('55')!==0) d='55'+d;
+    var nome=esc(val('nome')), cargo=esc(val('cargo')), tel=esc(phoneShown()), email=esc(val('email'));
+    var d=digits(phoneShown()); if(d && d.indexOf('55')!==0) d='55'+d;
     var telHref=el.wa.checked ? 'https://wa.me/'+d : 'tel:+'+d;
     var F='Arial,Helvetica,sans-serif', S='color:#5C6172;text-decoration:none', SEP='<span style="color:#B4BAC8">&nbsp;|&nbsp;</span>';
     var li=el.li.value.trim();
     var liHtml = li && /^https?:\/\//i.test(li) ? SEP+'<a href="'+esc(li)+'" style="color:#1B4BFF;text-decoration:none;font-weight:bold">LinkedIn</a>' : '';
     var waTag = el.wa.checked ? ' <span style="color:#8A90A2">(WhatsApp)</span>' : '';
     var addr = el.end.checked ? '<div style="font-size:12.5px;line-height:19px;color:#5C6172"><a href="'+MAPS+'" style="'+S+'">'+ADDR1+'<br>'+ADDR2+'</a></div>' : '';
+    var contact=(d ? '<a href="'+telHref+'" style="'+S+'">'+tel+'</a>'+waTag+SEP : '')+'<a href="mailto:'+email+'" style="'+S+'">'+email+'</a>';
     if(fmt()==='logo'){
       return '<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:'+F+';color:#141824">'
       +'<tr><td style="padding:0 0 12px 0"><a href="https://www.cotabox.com.br" style="text-decoration:none"><img src="'+imgSrc+'" width="200" height="50" alt="cotabox" style="display:block;border:0;width:200px;height:50px"></a></td></tr>'
       +'<tr><td style="font-size:16px;line-height:20px;font-weight:bold;color:#141824">'+nome+'</td></tr>'
       +'<tr><td style="font-size:13px;line-height:18px;color:#5C6172">'+cargo+'</td></tr>'
       +'<tr><td style="padding:9px 0"><table cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td width="36" height="3" style="width:36px;height:3px;line-height:3px;font-size:0;background-color:#1B4BFF;background-image:linear-gradient(90deg,#1B4BFF,#08C8E6)">&nbsp;</td></tr></table></td></tr>'
-      +'<tr><td style="font-size:12.5px;line-height:19px;color:#5C6172"><a href="'+telHref+'" style="'+S+'">'+tel+'</a>'+waTag+SEP+'<a href="mailto:'+email+'" style="'+S+'">'+email+'</a></td></tr>'
+      +'<tr><td style="font-size:12.5px;line-height:19px;color:#5C6172">'+contact+'</td></tr>'
       +(el.end.checked?'<tr><td style="font-size:12.5px;line-height:19px;color:#5C6172"><a href="'+MAPS+'" style="'+S+'">'+ADDR1+'<br>'+ADDR2+'</a></td></tr>':'')
       +'<tr><td style="font-size:12.5px;line-height:19px;padding-top:4px"><a href="https://www.cotabox.com.br" style="color:#1B4BFF;text-decoration:none;font-weight:bold">www.cotabox.com.br</a>'+liHtml+'</td></tr></table>';
     }
@@ -159,7 +297,7 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
       +'<div style="font-size:16px;line-height:20px;font-weight:bold;color:#141824">'+nome+'</div>'
       +'<div style="font-size:13px;line-height:18px;color:#5C6172;padding-top:1px">'+cargo+' <span style="color:#B4BAC8">|</span> <b style="color:#1B4BFF">cotabox</b></div>'
       +'<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;margin:9px 0"><tr><td width="36" height="3" style="width:36px;height:3px;line-height:3px;font-size:0;background-color:#1B4BFF;background-image:linear-gradient(90deg,#1B4BFF,#08C8E6)">&nbsp;</td></tr></table>'
-      +'<div style="font-size:12.5px;line-height:19px;color:#5C6172"><a href="'+telHref+'" style="'+S+'">'+tel+'</a>'+waTag+SEP+'<a href="mailto:'+email+'" style="'+S+'">'+email+'</a></div>'
+      +'<div style="font-size:12.5px;line-height:19px;color:#5C6172">'+contact+'</div>'
       +addr
       +'<div style="font-size:12.5px;line-height:19px;padding-top:4px"><a href="https://www.cotabox.com.br" style="color:#1B4BFF;text-decoration:none;font-weight:bold">www.cotabox.com.br</a>'+liHtml+'</div>'
       +'</td></tr></table>';
@@ -170,6 +308,7 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
   function fallback(){ return fmt()==='logo' ? (el.anim.checked?LOGO_GIF_FALLBACK:LOGO_PNG_FALLBACK) : (el.anim.checked?GIF_FALLBACK:ICON_FALLBACK); }
   var imgOk=null;
   function render(){
+    syncWhatsapp();
     var url=imgUrl();
     el.sig.innerHTML=build(url);
     var im=el.sig.querySelector('img');
@@ -184,11 +323,11 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
     try{ var o=JSON.parse(localStorage.getItem('cbsig')||'null'); if(o){ ids.forEach(function(k){ if(o[k]!=null && o[k]!=='') el[k].value=o[k]; }); el.wa.checked=!!o.wa; el.end.checked=o.end!==false; el.anim.checked=o.anim!==false; if(o.fmt){ var rr=document.querySelector('input[name=fmt][value='+o.fmt+']'); if(rr) rr.checked=true; } } }catch(e){}
   }
   function say(kind,msg){ el.status.className='status '+kind; el.status.textContent=msg; }
-  function missing(){ return ['nome','cargo','tel','email'].filter(function(k){ return !el[k].value.trim(); }); }
+
   function imgNote(){ return imgOk===false ? ' Atenção: não foi possível carregar a imagem da assinatura agora, então ela pode não aparecer para quem recebe. Tente de novo em alguns instantes.' : ''; }
 
   function copyRich(){
-    var m=missing(); if(m.length){ say('warn','Preencha nome, cargo, telefone e e-mail antes de copiar.'); return; }
+    if(!validateForm()) return;
     var html=build(imgUrl());
     var done=function(){ say('ok','Assinatura copiada. Agora cole nas configurações do seu e-mail.'+imgNote()); };
     var fallback=function(){
@@ -207,7 +346,7 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
     }catch(e){ fallback(); }
   }
   function copyHtml(){
-    var m=missing(); if(m.length){ say('warn','Preencha nome, cargo, telefone e e-mail antes de copiar.'); return; }
+    if(!validateForm()) return;
     var html=build(imgUrl());
     var showManual=function(){ el.manual.value=html; el.manual.style.display='block'; el.manual.focus(); el.manual.select(); say('warn','O navegador bloqueou a cópia automática. O código está selecionado abaixo: copie com Ctrl+C (Cmd+C no Mac).'); };
     try{
@@ -216,6 +355,7 @@ textarea{ width:100%; min-height:120px; font:12px ui-monospace,SFMono-Regular,Me
     }catch(e){ showManual(); }
   }
 
+  bindPhoneMask(el.tel); bindEmailMask(el.email); bindValidation();
   load(); render();
   ['nome','cargo','tel','email','li'].forEach(function(k){ el[k].addEventListener('input',render); });
   ['wa','end','anim'].forEach(function(k){ el[k].addEventListener('change',function(){ imgOk=null; render(); }); });
